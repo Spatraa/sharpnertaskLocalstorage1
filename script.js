@@ -28,19 +28,39 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('users', JSON.stringify(usersArray));
   
       // Display user data in the browser
-      userDataDiv.innerHTML += `<p>Name: ${name}</p><p>Email: ${email}</p><p>Phone: ${phone}</p><hr>`;
-  
+      renderUsers();
+      
       // Reset form fields
       userForm.reset();
     });
   
     // Display existing user data from localStorage on page load
-    const storedUsers = localStorage.getItem('users');
-    if (storedUsers) {
-      const usersArray = JSON.parse(storedUsers);
-      usersArray.forEach(user => {
-        userDataDiv.innerHTML += `<p>Name: ${user.name}</p><p>Email: ${user.email}</p><p>Phone: ${user.phone}</p><hr>`;
-      });
+    renderUsers();
+  
+    function renderUsers() {
+      userDataDiv.innerHTML = ''; // Clear previous data
+  
+      const storedUsers = localStorage.getItem('users');
+      if (storedUsers) {
+        const usersArray = JSON.parse(storedUsers);
+        usersArray.forEach((user, index) => {
+          const userItem = document.createElement('ul');
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          
+          // Add event listener for delete button
+          deleteButton.addEventListener('click', function() {
+            // Remove user from array and update localStorage
+            usersArray.splice(index, 1);
+            localStorage.setItem('users', JSON.stringify(usersArray));
+            renderUsers(); // Re-render the updated user list
+          });
+  
+          userItem.innerHTML = `<li>Name: ${user.name} | Email: ${user.email} | Phone: ${user.phone}</li>`;
+          userItem.appendChild(deleteButton);
+          userDataDiv.appendChild(userItem);
+        });
+      }
     }
   });
   
