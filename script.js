@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   userForm.addEventListener('submit', function(event) {
     event.preventDefault();
+    
 
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -15,7 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
       email: email,
       phone: phone
     };
-
+   axios.post('https://crudcrud.com/api/16315bd528df47dca6a09d63ed7ff762/appointData',userDetails)
+   .then((response)=>{
+    console.log(response);
+   })
+   .catch((err)=>{
+    console.log(err);
+   })
     const storedUsers = localStorage.getItem('users');
     const usersArray = storedUsers ? JSON.parse(storedUsers) : [];
 
@@ -70,3 +77,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+
